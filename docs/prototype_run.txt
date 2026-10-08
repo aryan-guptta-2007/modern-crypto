@@ -1,0 +1,135 @@
+﻿
+==========================================================================
+Feasibility prototype: legacy cipher migration gateway
+==========================================================================
+  Python            3.11.9
+  Platform          Windows-10-10.0.26200-SP0
+  AES key           256-bit, generated randomly for this run
+  Frame format      27 characters over a 36-character alphabet
+  AES backend       initialised before timing, so Stage 1 shows steady-state cost
+
+  Note on every timing in this log: the classical ciphers are pure Python, while AES
+  runs in the cryptography library's compiled backend with AES-NI hardware support, so
+  the absolute figures compare implementations, not the algorithms themselves.
+
+==========================================================================
+Stage 1  Normal operation, end to end
+==========================================================================
+
+  Legacy cipher on the device link: Caesar (shift 3)
+    device plaintext frame             D07V2301I0152F4998B1Q000123
+    device: legacy encrypt               0.0197 ms
+    on the legacy link                 G3AY5634L3485I7CCBE4T333456
+    gateway: legacy decrypt              0.0182 ms
+    gateway: parse                       0.0129 ms
+    gateway: validate                    0.0101 ms
+    gateway: AES-256-GCM seal            0.0229 ms
+    envelope 74 bytes wrapping a 27-byte frame (47 bytes overhead)
+    centre: AES-256-GCM open             0.0084 ms
+    control centre accepted            device 07  230.1 V  15.2 A  49.98 Hz  breaker closed  seq 123
+    frame at the centre is identical to the frame the device sent
+
+  Legacy cipher on the device link: Vigenere (key 'GRIDKEY')
+    device plaintext frame             D07V2301I0152F4998B1Q000123
+    device: legacy encrypt               0.0130 ms
+    on the legacy link                 JHFYC7O7Z84F63AQHBL5E6H84C7
+    gateway: legacy decrypt              0.0096 ms
+    gateway: parse                       0.0029 ms
+    gateway: validate                    0.0023 ms
+    gateway: AES-256-GCM seal            0.0062 ms
+    envelope 74 bytes wrapping a 27-byte frame (47 bytes overhead)
+    centre: AES-256-GCM open             0.0056 ms
+    control centre accepted            device 07  230.1 V  15.2 A  49.98 Hz  breaker closed  seq 123
+    frame at the centre is identical to the frame the device sent
+
+==========================================================================
+Stage 2  V1  Passive attacker on the legacy link
+==========================================================================
+
+  Method: ciphertext-only exhaustive key search over the 36-key additive space,
+  with a plaintext-recognition test. No matching plaintext is used.
+
+  Attacker holds only the ciphertext   G3AY5634L3485I7CCBE4T333456
+  Recognition test: does the candidate parse as a well-formed reading?
+  (frame layout is public protocol knowledge: tags ['D', 'V', 'I', 'F', 'B', 'Q'] at fixed positions)
+
+  Tried all 36 additive keys in 0.2039 ms; 1 candidate(s) passed the recognition test.
+    key k=3   -> D07V2301I0152F4998B1Q000123   device 07  230.1 V  15.2 A  49.98 Hz  breaker closed  seq 123
+  The key and the reading are both recovered. Key space 36 offers no protection.
+
+==========================================================================
+Stage 3  V2  Authenticated false data
+==========================================================================
+
+  Genuine reading from the device      D07V2301I0152F4998B1Q000124   (2301 = 230.1 V)
+
+    gross edit, gateway validation OFF
+      attacker injects                 G3AY5C34L3485I7CCBE4T333457
+      centre ACCEPTED as authentic     device 07  290.1 V  15.2 A  49.98 Hz  breaker closed  seq 124
+      GCM tag verified, yet the voltage is false (sent 290.1 V, true value 230.1 V)
+
+    gross edit, gateway validation ON
+      attacker injects                 G3AY5C34L3485I7CCBE4T333457
+      gateway REJECTED                 V=2901 outside plausible range [2000, 2600]
+
+    small edit, gateway validation ON
+      attacker injects                 G3AY5644L3485I7CCBE4T333457
+      centre ACCEPTED as authentic     device 07  231.1 V  15.2 A  49.98 Hz  breaker closed  seq 124
+      GCM tag verified, yet the voltage is false (sent 231.1 V, true value 230.1 V)
+
+  Validation reduces the problem. It does not remove it: an edit that stays
+  inside plausible limits is still wrapped in a valid AES envelope.
+
+==========================================================================
+Stage 4  Editing the AES envelope itself
+==========================================================================
+
+  Untouched envelope, 74 bytes: accepted, D07V2301I0152F4998B1Q000126
+
+    one bit flipped in the ciphertext, byte offset 31
+      centre REJECTED  InvalidTag: GCM tag check failed, the envelope was altered
+
+    one bit flipped in the header, inside gateway_id, byte offset 1
+      centre REJECTED  InvalidTag: GCM tag check failed, the envelope was altered
+
+  The header is passed to GCM as associated data, so editing it fails the tag
+  check exactly as editing the ciphertext does. Contrast with Stage 3: GCM
+  proves the envelope is unaltered in transit. It cannot prove that the reading
+  placed inside it by the gateway was true.
+
+==========================================================================
+Stage 5  V6  Replay on each link
+==========================================================================
+
+  First delivery of envelope seq 500: accepted
+  Replay of the same envelope:      rejected (replayed or out-of-order envelope: seq 500 after 500)
+  Replay of the same legacy frame:  accepted by the gateway (D07V2301I0152F4998B1Q000125), because the legacy frame carries no freshness data
+
+==========================================================================
+Stage 6  Per-stage cost
+==========================================================================
+
+  Mean of 2000 runs per stage, single process, no network.
+    stage                    mean (ms)   mean (us)
+    Caesar encrypt             0.00416        4.16
+    Caesar decrypt             0.00397        3.97
+    Vigenere encrypt           0.00544        5.44
+    Vigenere decrypt           0.00581        5.81
+    parse                      0.00160        1.60
+    validate                   0.00197        1.97
+    AES-256-GCM seal           0.00315        3.15
+    AES-256-GCM open           0.00308        3.08
+
+  Note on every timing in this log: the classical ciphers are pure Python, while AES
+  runs in the cryptography library's compiled backend with AES-NI hardware support, so
+  the absolute figures compare implementations, not the algorithms themselves.
+  These figures are for one machine and include Python interpreter overhead.
+  They are not a prediction of latency on real gateway hardware.
+
+==========================================================================
+Result
+==========================================================================
+  The pipeline runs end to end, the legacy link is broken by exhaustive search,
+  and a forged reading is delivered to the control centre under a valid AES tag.
+  The architecture and the experiments planned for it are therefore feasible.
+

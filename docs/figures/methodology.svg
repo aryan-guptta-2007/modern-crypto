@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 600" width="1040" height="600" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <title>Methodology: five phases from cipher implementation to analysis</title>
+
+  <defs>
+    <marker id="m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#333333"/>
+    </marker>
+    <marker id="mg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1e6b38"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1040" height="600" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="19" font-weight="600" fill="#111111">Methodology: five phases</text>
+  <text x="24" y="56" font-size="13" fill="#555555">Figure C.2 — Part C, section C.4. Each phase is verified before the next begins. Phases 1 and 2 are already partly complete.</text>
+
+  <!-- Phase 1 -->
+  <rect x="24" y="92" width="186" height="178" rx="7" fill="#eef6f0" stroke="#1e6b38" stroke-width="2"/>
+  <text x="40" y="116" font-size="13.5" font-weight="700" fill="#1e6b38">Phase 1</text>
+  <text x="40" y="134" font-size="12.5" font-weight="600" fill="#111111">Ciphers and AES</text>
+  <line x1="40" y1="144" x2="194" y2="144" stroke="#9cc3a8" stroke-width="1"/>
+  <text x="40" y="162" font-size="11" fill="#333333">Caesar, Additive, Affine,</text>
+  <text x="40" y="178" font-size="11" fill="#333333">Playfair, Vigenère, Rail</text>
+  <text x="40" y="194" font-size="11" fill="#333333">Fence over the 36-char</text>
+  <text x="40" y="210" font-size="11" fill="#333333">alphabet; AES-256-GCM</text>
+  <text x="40" y="226" font-size="11" fill="#333333">envelope</text>
+  <rect x="40" y="236" width="154" height="22" rx="4" fill="#ffffff" stroke="#1e6b38" stroke-width="1.2"/>
+  <text x="117" y="251" font-size="10.5" font-weight="600" text-anchor="middle" fill="#1e6b38">2 of 7 done in prototype</text>
+
+  <!-- Phase 2 -->
+  <rect x="226" y="92" width="186" height="178" rx="7" fill="#eef6f0" stroke="#1e6b38" stroke-width="2"/>
+  <text x="242" y="116" font-size="13.5" font-weight="700" fill="#1e6b38">Phase 2</text>
+  <text x="242" y="134" font-size="12.5" font-weight="600" fill="#111111">Gateway and centre</text>
+  <line x1="242" y1="144" x2="396" y2="144" stroke="#9cc3a8" stroke-width="1"/>
+  <text x="242" y="162" font-size="11" fill="#333333">Device simulator, profile</text>
+  <text x="242" y="178" font-size="11" fill="#333333">lookup, parser, switchable</text>
+  <text x="242" y="194" font-size="11" fill="#333333">validator, logger, control</text>
+  <text x="242" y="210" font-size="11" fill="#333333">centre. Split into three</text>
+  <text x="242" y="226" font-size="11" fill="#333333">processes over sockets</text>
+  <rect x="242" y="236" width="154" height="22" rx="4" fill="#ffffff" stroke="#1e6b38" stroke-width="1.2"/>
+  <text x="319" y="251" font-size="10.5" font-weight="600" text-anchor="middle" fill="#1e6b38">single-process version done</text>
+
+  <!-- Phase 3 -->
+  <rect x="428" y="92" width="186" height="178" rx="7" fill="#fdf0ef" stroke="#b3261e" stroke-width="2"/>
+  <text x="444" y="116" font-size="13.5" font-weight="700" fill="#b3261e">Phase 3</text>
+  <text x="444" y="134" font-size="12.5" font-weight="600" fill="#111111">Attacks</text>
+  <line x1="444" y1="144" x2="598" y2="144" stroke="#e5b3ae" stroke-width="1"/>
+  <text x="444" y="162" font-size="11" fill="#333333">Exhaustive search, known</text>
+  <text x="444" y="178" font-size="11" fill="#333333">plaintext, frequency,</text>
+  <text x="444" y="194" font-size="11" fill="#333333">Kasiski and IoC, tamper,</text>
+  <text x="444" y="210" font-size="11" fill="#333333">inject, replay, ECB demo,</text>
+  <text x="444" y="226" font-size="11" fill="#333333">downgrade</text>
+  <rect x="444" y="236" width="154" height="22" rx="4" fill="#ffffff" stroke="#b3261e" stroke-width="1.2"/>
+  <text x="521" y="251" font-size="10.5" font-weight="600" text-anchor="middle" fill="#b3261e">V1, V2, V6 shown already</text>
+
+  <!-- Phase 4 -->
+  <rect x="630" y="92" width="186" height="178" rx="7" fill="#fff8e5" stroke="#9a7b1f" stroke-width="2"/>
+  <text x="646" y="116" font-size="13.5" font-weight="700" fill="#9a7b1f">Phase 4</text>
+  <text x="646" y="134" font-size="12.5" font-weight="600" fill="#111111">Mitigations</text>
+  <line x1="646" y1="144" x2="800" y2="144" stroke="#d8c48a" stroke-width="1"/>
+  <text x="646" y="162" font-size="11" fill="#333333">Range, rate-of-change and</text>
+  <text x="646" y="178" font-size="11" fill="#333333">sequence checks. Run every</text>
+  <text x="646" y="194" font-size="11" fill="#333333">Phase 3 attack twice, with</text>
+  <text x="646" y="210" font-size="11" fill="#333333">validation off and on, to</text>
+  <text x="646" y="226" font-size="11" fill="#333333">isolate their effect</text>
+  <rect x="646" y="236" width="154" height="22" rx="4" fill="#ffffff" stroke="#9a7b1f" stroke-width="1.2"/>
+  <text x="723" y="251" font-size="10.5" font-weight="600" text-anchor="middle" fill="#9a7b1f">the controlled comparison</text>
+
+  <!-- Phase 5 -->
+  <rect x="832" y="92" width="186" height="178" rx="7" fill="#f2f2f7" stroke="#4a4a7a" stroke-width="2"/>
+  <text x="848" y="116" font-size="13.5" font-weight="700" fill="#4a4a7a">Phase 5</text>
+  <text x="848" y="134" font-size="12.5" font-weight="600" fill="#111111">Experiments</text>
+  <line x1="848" y1="144" x2="1002" y2="144" stroke="#b8b8cc" stroke-width="1"/>
+  <text x="848" y="162" font-size="11" fill="#333333">Break time, latency,</text>
+  <text x="848" y="178" font-size="11" fill="#333333">overhead, detection rate,</text>
+  <text x="848" y="194" font-size="11" fill="#333333">false alarms. Each writes</text>
+  <text x="848" y="210" font-size="11" fill="#333333">a CSV and a chart to</text>
+  <text x="848" y="226" font-size="11" fill="#333333">experiments/results/</text>
+  <rect x="848" y="236" width="154" height="22" rx="4" fill="#ffffff" stroke="#4a4a7a" stroke-width="1.2"/>
+  <text x="925" y="251" font-size="10.5" font-weight="600" text-anchor="middle" fill="#4a4a7a">answers C.3 questions</text>
+
+  <!-- arrows between phases -->
+  <line x1="212" y1="181" x2="222" y2="181" stroke="#333333" stroke-width="2" marker-end="url(#m)"/>
+  <line x1="414" y1="181" x2="424" y2="181" stroke="#333333" stroke-width="2" marker-end="url(#m)"/>
+  <line x1="616" y1="181" x2="626" y2="181" stroke="#333333" stroke-width="2" marker-end="url(#m)"/>
+  <line x1="818" y1="181" x2="828" y2="181" stroke="#333333" stroke-width="2" marker-end="url(#m)"/>
+
+  <!-- verification band -->
+  <rect x="24" y="300" width="994" height="88" rx="7" fill="#ffffff" stroke="#1e6b38" stroke-width="1.6"/>
+  <text x="40" y="322" font-size="12.5" font-weight="700" fill="#1e6b38">Verification gate — a phase is not complete until its check passes</text>
+  <text x="40" y="344" font-size="11" fill="#333333">P1: round-trip tests, Decrypt(Encrypt(m)) = m for every cipher and edge case; altered envelope, header or tag rejected</text>
+  <text x="40" y="361" font-size="11" fill="#333333">P2: end-to-end test, a reading sent by the device arrives unchanged at the centre · P3: each attack recovers the key or forces acceptance</text>
+  <text x="40" y="378" font-size="11" fill="#333333">P4: detection counted for both validator states · P5: every figure traceable to a CSV produced by a re-runnable script</text>
+
+  <line x1="117" y1="276" x2="117" y2="296" stroke="#1e6b38" stroke-width="1.4" marker-end="url(#mg)"/>
+  <line x1="319" y1="276" x2="319" y2="296" stroke="#1e6b38" stroke-width="1.4" marker-end="url(#mg)"/>
+  <line x1="521" y1="276" x2="521" y2="296" stroke="#1e6b38" stroke-width="1.4" marker-end="url(#mg)"/>
+  <line x1="723" y1="276" x2="723" y2="296" stroke="#1e6b38" stroke-width="1.4" marker-end="url(#mg)"/>
+  <line x1="925" y1="276" x2="925" y2="296" stroke="#1e6b38" stroke-width="1.4" marker-end="url(#mg)"/>
+
+  <!-- feedback loop -->
+  <polyline points="925,392 925,424 117,424 117,400" fill="none" stroke="#777777" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#m)"/>
+  <rect x="396" y="406" width="250" height="36" rx="5" fill="#ffffff" stroke="#777777" stroke-width="1.2"/>
+  <text x="521" y="428" font-size="11" text-anchor="middle" fill="#555555">a failed check sends the phase back, not forward</text>
+
+  <!-- outputs -->
+  <rect x="24" y="466" width="994" height="94" rx="7" fill="#f5f5f5" stroke="#888888" stroke-width="1.3"/>
+  <text x="40" y="488" font-size="12.5" font-weight="700" fill="#111111">What the method produces</text>
+  <text x="40" y="510" font-size="11.5" fill="#333333">A reproducible simulation in which each of the eight transition vulnerabilities of Part A can be exercised on demand, measured, and shown.</text>
+  <text x="40" y="530" font-size="11.5" fill="#333333">The headline measurement is the detection rate of gateway-side validation against tampered and replayed frames, reported with what it misses.</text>
+  <text x="40" y="550" font-size="11.5" fill="#333333">No part of the architecture is claimed as novel; the output is evidence about an existing design, not a new mechanism.</text>
+</svg>

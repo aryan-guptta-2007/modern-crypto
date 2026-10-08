@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Build artefact: regenerate from docs/project_proposal.md
+docs/project_proposal.html
+
+# Local keys — the prototype reads AES_KEY_HEX from the environment,
+# and no key should ever be committed.
+*.key
+.env
+
+# OS
+Thumbs.db
+.DS_Store

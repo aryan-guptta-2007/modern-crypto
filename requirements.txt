@@ -1,0 +1,2 @@
+# Feasibility prototype (Milestone 2). Verified on Python 3.11.9, Windows 11.
+cryptography==46.0.5
